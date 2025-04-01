@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
-import { Dashboard, JobDetails, Profile, Signin, Signup, Companies, Error } from './pages';
+import { Dashboard, JobDetails, Profile, Signin, Signup, Companies, Error, Statistics } from './pages';
 import { Header } from './components';
 
 const App = () => {
@@ -9,8 +9,8 @@ const App = () => {
 
   return (
       <Routes>
-        <Route path="/" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Signin location={location} />} />
+        <Route path="/signup" element={<Signup location={location} />} />
         <Route
           path="*"
           element={
@@ -22,6 +22,7 @@ const App = () => {
                   <Route path="/job/:id" element={<JobDetails location={location}/>} />
                   <Route path="/profile" element={<Profile location={location}/>} />
                   <Route path="/companies" element={<Companies location={location}/>} />
+                  <Route path="/statistics" element={<Statistics location={location}/>} />
                   <Route path="*" element={<Error />} />
                 </Routes>
               </main>

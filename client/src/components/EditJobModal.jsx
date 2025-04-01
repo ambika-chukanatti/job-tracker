@@ -87,6 +87,8 @@ const EditJobModal = ({ ji, job, isOpen, onClose, onSave, companies, isEdit }) =
                   company_name: e.target.value,
                   company_id: selectedOption.getAttribute("data-id"),
                 });
+
+                console.log(formData)
               }}
               className="border border-gray-300 p-2 rounded w-full"
             >

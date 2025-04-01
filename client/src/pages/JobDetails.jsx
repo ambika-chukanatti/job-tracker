@@ -33,7 +33,7 @@ const JobDetails = ({ location }) => {
 
   useEffect(()=>{
     getJob()
-  },[location])
+  },[])
 
   const activeStepIndex = statusSteps.indexOf(job?.status);
 

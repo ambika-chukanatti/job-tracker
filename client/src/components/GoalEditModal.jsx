@@ -16,6 +16,11 @@ const GoalEditModal = ({ goal, onSave, onClose, isOpen }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = () => {
+    onSave(formData);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300">
       <div className="bg-white w-[500px] p-8 rounded-lg shadow-2xl transform scale-100 transition-transform duration-300">
@@ -80,7 +85,7 @@ const GoalEditModal = ({ goal, onSave, onClose, isOpen }) => {
             </button>
             <button
               className="px-4 py-2 rounded cursor-pointer bg-blue-500 text-white font-medium hover:bg-blue-700 transition-all"
-              onClick={() => onSave(formData)}
+              onClick={handleSubmit}
             >
               Save
             </button>

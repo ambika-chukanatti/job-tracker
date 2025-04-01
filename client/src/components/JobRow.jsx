@@ -16,16 +16,24 @@ const JobRow = ({ i, job, onEdit, onDelete }) => {
         </td>
         <td className="p-3 border border-gray-300">{job.deadline}</td>
         <td className="p-3 border border-gray-300">{job.date_applied}</td>
-        <td className="p-3 border border-gray-300">{job.follow_up}</td>
-        <td className="p-3 border border-gray-300 flex justify-center gap-2">
-          <button 
-            onClick={() => onEdit()} 
+        <td className="p-3 border border-gray-300">
+          {job.follow_up}
+        </td>
+        <td colSpan="9" className="p-3 border border-gray-300 text-center">
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              onEdit();
+            }}
             className="px-3 py-2 mr-2 rounded-md cursor-pointer border border-gray-300 text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all duration-200 shadow-sm"
           >
             Edit
           </button>
-          <button 
-            onClick={() => onDelete()} 
+          <button
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete();
+            }}
             className="px-3 py-2 rounded-md cursor-pointer text-white bg-gray-800 hover:bg-gray-700 transition-all duration-200 shadow-sm"
           >
             Delete

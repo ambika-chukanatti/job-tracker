@@ -6,7 +6,8 @@ import User from "../models/user.js";
  */
 export const createCompany = async (req, res) => {
   try {
-    const { user_id, company_name, industry, company_size, company_type, location, website, year_founded } = req.body;
+    const user_id = req.user.id;
+    const { company_name, industry, company_size, company_type, location, website, year_founded } = req.body;
 
     const company = await Company.create({
       user_id,
@@ -21,6 +22,7 @@ export const createCompany = async (req, res) => {
 
     res.status(201).json({ message: "Company created successfully", company });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };

@@ -36,7 +36,7 @@ const Companies = ({ location }) => {
 
   useEffect(()=>{
     getCompanies()
-  },[location])
+  },[])
 
   const handleSave = async(formData, id, ci) => {
     const url = isEdit ? `${api_url}/company/${id}` : `${api_url}/company`
@@ -66,6 +66,8 @@ const Companies = ({ location }) => {
       }else{
         setCompanies([...companies, data.company]);
       }
+
+      setIsDetailsModalOpen(false)
     }catch(err){
         console.error(err)
     }
@@ -92,7 +94,7 @@ const Companies = ({ location }) => {
       const updatedCompanies = [...companies];
       updatedCompanies.pop(ci,1);
       setCompanies(updatedCompanies);
-
+      setIsDetailsModalOpen(false)
     }catch(err){
         console.error(err)
     }

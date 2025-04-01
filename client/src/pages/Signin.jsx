@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 const api_url = "http://localhost:3000/api"
 
-const Signin = () => {
+const Signin = ({ location }) => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const navigate = useNavigate()
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

@@ -59,7 +59,7 @@ const Profile = ({ location }) => {
   useEffect(()=>{
     getGoal()
     getUser()
-  },[location])
+  },[])
 
   const handleUserChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -84,7 +84,7 @@ const Profile = ({ location }) => {
 
       console.log("goal", data)
 
-      setGoal(data)
+      setGoal(data.target)
     }catch(err){
         console.error(err)
     }
@@ -131,7 +131,7 @@ const Profile = ({ location }) => {
           throw new Error(data.message || "Failed to verify user");
       }
 
-      console.log("user", data)
+      alert("User details updated")
 
       setUser(data)
     }catch(err){

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { JobRow, EditJobModal } from "../components";
+import { useSearchParams } from "react-router-dom";
+import { ArrowUpDown, ArrowDownUp } from "lucide-react";
 const api_url = "http://localhost:3000/api"
 const token = sessionStorage.getItem("token")
 
 const Dashboard = ({ location }) => {
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("dateSaved");
-  const [filterStatus, setFilterStatus] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedJob, setSelectedJob] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isEditJob, setIsEditJob] = useState(true); 
@@ -14,9 +14,38 @@ const Dashboard = ({ location }) => {
   const [companies, setCompanies] = useState([])
   const [ji, setJi] = useState(null);
 
-  const getJobs = async() => {
+  const search = searchParams.get("search") || "";
+  const sortBy = searchParams.get("sortBy") || "";
+  const filter = searchParams.get("filter") || "All";
+  const order = searchParams.get("order") || "asc";
+
+  const getJobs = async(filter = "All", search = "", sortBy = "", order = "asc") => {
+    const query = new URLSearchParams({ filter, search, sortBy, order }).toString();
     try{
-        const response = await fetch(`${api_url}/job`, {
+        const response = await fetch(`${api_url}/job?${query}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        });
+    
+        const data = await response.json();
+        console.log(data)
+    
+        if (!response.ok) {
+            throw new Error(data.message || "Failed to verify user");
+        }
+
+        setJobs(data)
+    }catch(err){
+        console.error(err)
+    }
+  }
+
+  const getCompanies = async() => {
+    try{
+        const response = await fetch(`${api_url}/company`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -30,15 +59,16 @@ const Dashboard = ({ location }) => {
             throw new Error(data.message || "Failed to verify user");
         }
 
-        setJobs(data)
+        setCompanies(data)
     }catch(err){
         console.error(err)
     }
   }
 
   useEffect(()=>{
-    getJobs()
-  },[location])
+    getJobs(filter, search, sortBy, order)
+    getCompanies()
+  },[])
 
   const statusOptions = ["Bookmarked", "Applied", "No Response", "Not Selected", "I Withdrew", "Interviewing", "Negotiating", "Accepted"];
 
@@ -47,25 +77,25 @@ const Dashboard = ({ location }) => {
     return acc;
   }, {});
 
-  const filteredJobs = jobs.filter(job =>
-    (filterStatus === "All" || job.status.toLowerCase() === filterStatus.toLowerCase()) &&
-    (job.job_title.toLowerCase().includes(search.toLowerCase()) ||
-     job.company_name.toLowerCase().includes(search.toLowerCase()) ||
-     job.location.toLowerCase().includes(search.toLowerCase()) ||
-     String(job.salary).includes(search.toLowerCase()) ||
-     job.status.toLowerCase().includes(search.toLowerCase()) ||
-     String(job.deadline).toLowerCase().includes(search.toLowerCase()) ||
-     String(job.date_applied).toLowerCase().includes(search.toLowerCase()) ||
-     String(job.follow_up).toLowerCase().includes(search.toLowerCase()))
-  );
-  
-  const sortedJobs = sortBy
-    ? [...filteredJobs].sort((a, b) => {
-        const valA = a[sortBy] || "";
-        const valB = b[sortBy] || "";
-        return valA.localeCompare(valB);
-      })
-    : filteredJobs;  
+  const updateFilters = (key, value) => {
+    const newParams = new URLSearchParams(searchParams);
+    
+    if (value) {
+      newParams.set(key, value);
+    } else {
+      newParams.delete(key);
+    }
+    setSearchParams(newParams);
+
+    const updatedFilters = {
+      filter: newParams.get("filter") || "All",
+      search: newParams.get("search") || "",
+      sortBy: newParams.get("sortBy") || "",
+      order: newParams.get("order") || "asc",
+    };
+
+    getJobs(updatedFilters.filter, updatedFilters.search, updatedFilters.sortBy, updatedFilters.order);
+  }; 
 
   const handleEdit = (job, ji) => {
     setJi(ji)
@@ -160,13 +190,17 @@ const Dashboard = ({ location }) => {
             placeholder="Search jobs..."
             className="border-2 border-gray-300 p-2 rounded w-3/4"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => updateFilters("search", e.target.value)}
           />
         </div>
         <div className="w-full flex justify-end">
           <div className="flex items-center space-x-2 mr-4">
             <span className="text-gray-400 font-medium">Sort by:</span>
-            <select className="border-2 border-gray-300 p-2 rounded cursor-pointer bg-gray-800 text-white" onChange={(e) => setSortBy(e.target.value)}>
+            <select 
+              className="border-2 border-gray-300 p-2 rounded cursor-pointer bg-gray-800 text-white" 
+              value={sortBy}
+              onChange={(e) => updateFilters("sortBy", e.target.value)}
+            >
               <option value="">All</option>
               <option value="deadline">Deadline</option>
               <option value="date_applied">Date Applied</option>
@@ -175,7 +209,11 @@ const Dashboard = ({ location }) => {
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-gray-400 font-medium">Filter:</span>
-            <select className="border-2 border-gray-300 p-2 rounded cursor-pointer bg-gray-800 text-white" onChange={(e) => setFilterStatus(e.target.value)}>
+            <select 
+              className="border-2 border-gray-300 p-2 rounded cursor-pointer bg-gray-800 text-white"
+              value={filter} 
+              onChange={(e) => updateFilters("filter", e.target.value)}
+            >
               <option value="All">All</option>
               <option value="Bookmarked">Bookmarked</option>
               <option value="Applied">Applied</option>
@@ -187,6 +225,19 @@ const Dashboard = ({ location }) => {
               <option value="No Response">No Response</option>
             </select>
           </div>
+          <button
+            className="ml-4 border-2 border-gray-300 py-2 px-4 rounded cursor-pointer bg-gray-800 text-white flex items-center"
+            onClick={() => {
+              const newOrder = searchParams.get("order") === "asc" ? "desc" : "asc";
+              updateFilters("order", newOrder);
+            }}
+          >
+            {order === "asc" ? (
+              <ArrowUpDown className="w-4 h-4" />
+            ) : (
+              <ArrowDownUp className="w-4 h-4" />
+            )}
+          </button>
           <button className="bg-green-500 text-white px-4 py-2 rounded ml-4 cursor-pointer" onClick={handleAddNewJob}>+ Add New Job</button>
         </div>
       </div>
@@ -208,7 +259,7 @@ const Dashboard = ({ location }) => {
           </tr>
         </thead>
         <tbody className>
-          {sortedJobs.map((job, i) => (
+          {jobs.map((job, i) => (
             <JobRow i={i+1} job={job} onEdit={() => handleEdit(job, i)} onDelete={() => handleDelete(job.id, i)} />
           ))}
         </tbody>

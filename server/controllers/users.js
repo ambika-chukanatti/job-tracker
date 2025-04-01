@@ -16,7 +16,7 @@ const createUser = async (req, res) => {
             password: hashedPassword 
         });
 
-        const token = jwt.sign({ userId: user.id }, "MY_SECRET_KEY", { expiresIn: "6h" });
+        const token = jwt.sign({ userId: user.id },  process.env.SECRET_KEY, { expiresIn: "6h" });
 
         const data = {
             token: token,
@@ -51,7 +51,7 @@ const verifyUser = async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        const token = jwt.sign({ userId: user.id }, "MY_SECRET_KEY", { expiresIn: "6h" });
+        const token = jwt.sign({ userId: user.id },  process.env.SECRET_KEY, { expiresIn: "6h" });
 
         const data = {
             token: token,
@@ -106,7 +106,7 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = req.user.id;
         const { username, email, password } = req.body;
 
         const user = await User.findByPk(id);

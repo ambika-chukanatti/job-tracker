@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 const CompanyEditModal = ({ ci, company, isOpen, onClose, onSave, isEdit }) => {
   const newCompany = {
+    id: 0,
     company_name: "",
     industry: "",
     company_size: "",
@@ -23,7 +24,7 @@ const CompanyEditModal = ({ ci, company, isOpen, onClose, onSave, isEdit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData, company.id, ci);
+    onSave(formData, formData.id, ci);
     onClose();
   };
 
@@ -38,7 +39,7 @@ const CompanyEditModal = ({ ci, company, isOpen, onClose, onSave, isEdit }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {Object.keys(newCompany).map((key) => (
+            {Object.keys(newCompany).slice(1).map((key) => (
               <div key={key}>
                 <label className="block font-semibold text-gray-400">
                   {key.replace("_", " ").replace(/\b\w/g, (char) => char.toUpperCase())}

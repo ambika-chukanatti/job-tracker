@@ -15,6 +15,9 @@ const Header = () => {
         <Link to="/dashboard">JobTracker</Link>
       </h1>
       <nav className="flex space-x-10">
+        <Link to="/statistics" className="text-gray-700 hover:text-blue-600 transition">
+          Statistics
+        </Link>
         <Link to="/companies" className="text-gray-700 hover:text-blue-600 transition">
           Companies
         </Link>
