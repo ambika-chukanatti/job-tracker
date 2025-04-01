@@ -148,7 +148,7 @@ const Profile = ({ location }) => {
         >
           <h2 className="text-3xl font-bold mb-4 tracking-wide text-center">Next Career Goal</h2>
           
-          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-md">
+          <div className="bg-white text-gray-900 p-6 rounded-lg">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">

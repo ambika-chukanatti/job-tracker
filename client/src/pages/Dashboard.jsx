@@ -175,7 +175,7 @@ const Dashboard = ({ location }) => {
       {/* Status Tracker */}
       <div className="flex justify-between mb-4">
         {statusOptions.map(status => (
-          <div key={status} className="p-3 bg-[#003049] rounded text-center flex-1 mx-1">
+          <div key={status} className="p-3 bg-[#003049] rounded text-white text-center flex-1 mx-1">
             <p className="text-xl font-bold">{statusCounts[status] || 0}</p>
             <p className="">{status}</p>
           </div>

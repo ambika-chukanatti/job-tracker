@@ -53,7 +53,7 @@ const scheduleEmail = (email, type, jobTitle, companyName, date) => {
   try{
     if (!date) return; 
 
-    console.log(email, type, jobTitle, companyName, date)
+    //console.log(email, type, jobTitle, companyName, date)
 
     const formattedDate = new Date(date);
     const emailText = getEmailTemplate(type, jobTitle, companyName, formattedDate.toDateString());
