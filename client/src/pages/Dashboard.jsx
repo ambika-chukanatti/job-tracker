@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { JobRow, EditJobModal } from "../components";
 import { useSearchParams } from "react-router-dom";
 import { ArrowUpDown, ArrowDownUp } from "lucide-react";
-const api_url = "https://job-tracker-ya9s.onrender.com/api/"
+const api_url = "https://job-tracker-ya9s.onrender.com/api"
 const token = sessionStorage.getItem("token")
 
 const Dashboard = ({ location }) => {

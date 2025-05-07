@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { Bar, Pie } from "react-chartjs-2";
 import "chart.js/auto";
-const api_url = "https://job-tracker-ya9s.onrender.com/api/"
+const api_url = "https://job-tracker-ya9s.onrender.com/api"
 const token = sessionStorage.getItem("token")
 
 const Statistics = () => {

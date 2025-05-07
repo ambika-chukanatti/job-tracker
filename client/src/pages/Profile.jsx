@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { GoalEditModal } from "../components";
-const api_url = "https://job-tracker-ya9s.onrender.com/api/"
+const api_url = "https://job-tracker-ya9s.onrender.com/api"
 const token = sessionStorage.getItem("token")
 
 const Profile = ({ location }) => {

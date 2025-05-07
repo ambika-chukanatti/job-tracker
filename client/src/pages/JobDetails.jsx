@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-const api_url = "https://job-tracker-ya9s.onrender.com/api/"
+const api_url = "https://job-tracker-ya9s.onrender.com/api"
 const token = sessionStorage.getItem("token")
 
 const JobDetails = ({ location }) => {
